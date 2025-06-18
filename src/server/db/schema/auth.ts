@@ -1,35 +1,7 @@
-import { relations, sql } from "drizzle-orm";
-import { index, pgTableCreator, primaryKey } from "drizzle-orm/pg-core";
-import { type AdapterAccount } from "next-auth/adapters";
-
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const createTable = pgTableCreator((name) => `d-three-v_${name}`);
-
-export const posts = createTable(
-  "post",
-  (d) => ({
-    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-    name: d.varchar({ length: 256 }),
-    createdById: d
-      .varchar({ length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: d
-      .timestamp({ withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
-  }),
-  (t) => [
-    index("created_by_idx").on(t.createdById),
-    index("name_idx").on(t.name),
-  ],
-);
+import { sql } from "drizzle-orm";
+import { index, primaryKey } from "drizzle-orm/pg-core";
+import type { AdapterAccount } from "next-auth/adapters";
+import createTable from "../utils";
 
 export const users = createTable("user", (d) => ({
   id: d
@@ -46,10 +18,14 @@ export const users = createTable("user", (d) => ({
     })
     .default(sql`CURRENT_TIMESTAMP`),
   image: d.varchar({ length: 255 }),
-}));
-
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
+  createdAt: d.timestamp("created_at", {
+    mode: "date",
+    withTimezone: true,
+  }).defaultNow().notNull(),
+  updatedAt: d.timestamp("updated_at", {
+    mode: "date",
+    withTimezone: true,
+  }).defaultNow().$onUpdate(() => new Date()).notNull(),
 }));
 
 export const accounts = createTable(
@@ -58,7 +34,7 @@ export const accounts = createTable(
     userId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     type: d.varchar({ length: 255 }).$type<AdapterAccount["type"]>().notNull(),
     provider: d.varchar({ length: 255 }).notNull(),
     providerAccountId: d.varchar({ length: 255 }).notNull(),
@@ -76,10 +52,6 @@ export const accounts = createTable(
   ],
 );
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}));
-
 export const sessions = createTable(
   "session",
   (d) => ({
@@ -87,15 +59,11 @@ export const sessions = createTable(
     userId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
   }),
-  (t) => [index("t_user_id_idx").on(t.userId)],
+  (t) => [index("session_user_id_idx").on(t.userId)],
 );
-
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, { fields: [sessions.userId], references: [users.id] }),
-}));
 
 export const verificationTokens = createTable(
   "verification_token",
@@ -105,4 +73,29 @@ export const verificationTokens = createTable(
     expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
   }),
   (t) => [primaryKey({ columns: [t.identifier, t.token] })],
-);
+)
+
+export const authenticators = createTable(
+  "authenticator",
+  (d) => ({
+    credentialID: d.text().notNull().unique(),
+    userId: d.text()
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    providerAccountId: d.text().notNull(),
+    credentialPublicKey: d.text().notNull(),
+    counter: d.integer().notNull(),
+    credentialDeviceType: d.text().notNull(),
+    credentialBackedUp: d.boolean().notNull(),
+    transports: d.text(),
+  }),
+  (t) => [primaryKey({ columns: [t.userId, t.credentialID] })],
+)
+
+export type User = typeof users.$inferSelect
+export type Session = typeof sessions.$inferSelect
+
+export interface SessionExtend extends Session {
+  name: User["name"],
+  email: User["email"],
+}
