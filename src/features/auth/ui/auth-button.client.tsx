@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useSession } from "next-auth/react"
-import { Button } from '../ui/button';
+import { Button } from '@/shared/components/ui/button';
 import { signIn, signOut } from '@/server/auth/helpers';
 
-export default function AuthButtonClient() {
+export function AuthButtonClient() {
   const session = useSession()
 
   return session.data?.user ? (

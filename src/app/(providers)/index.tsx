@@ -1,6 +1,6 @@
-import { TRPCReactProvider } from "@/trpc/react";
+import { TRPCReactProvider } from "@/shared/api/trpc/react";
 import { ThemeProvider } from "./theme-provider";
-import { Toaster } from "../ui/sonner";
+import { Toaster } from "@/shared/components/ui/sonner";
 
 export default function Providers({
   children,

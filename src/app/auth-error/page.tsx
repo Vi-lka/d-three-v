@@ -1,6 +1,7 @@
 "use client"
 
-import AuthErrorCard from "@/components/auth/auth-error-card"
+import { AuthErrorCard } from "@/widgets/auth"
+
  
 export default function AuthErrorPage() {
   return (

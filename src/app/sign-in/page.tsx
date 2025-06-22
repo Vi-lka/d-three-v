@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 import React from 'react'
-import SignInForm from '@/components/auth/sign-in-form'
 import { auth } from '@/server/auth'
 import { providerMap } from '@/server/auth/config'
+import { SignInForm } from '@/widgets/auth'
 
 enum Error {
   Signin = "Signin",

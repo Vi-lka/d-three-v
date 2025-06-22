@@ -3,7 +3,7 @@
 import { AlertCircle, SkipBack } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/shared/components/ui/button'
 
 enum ErrorEnum {
   Configuration = "Configuration",
@@ -21,7 +21,7 @@ enum ErrorEnum {
   SessionRequired = "SessionRequired",
 }
 
-export default function AuthErrorCard() {
+export function AuthErrorCard() {
   const search = useSearchParams()
   const error = search.get("error") as ErrorEnum | undefined
 

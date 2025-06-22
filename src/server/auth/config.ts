@@ -1,6 +1,7 @@
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import { type Provider } from "next-auth/providers";
 import Yandex from "next-auth/providers/yandex";
+import Google from "next-auth/providers/google";
 import { env } from "@/env";
 
 /**
@@ -25,6 +26,14 @@ declare module "next-auth" {
 }
 
 const providers: Provider[] = [
+  Google({
+    clientId: env.AUTH_GOOGLE_ID,
+    clientSecret: env.AUTH_GOOGLE_SECRET,
+    profile(profile) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
+      return { ...profile, id: profile.sub, emailVerified: profile.email_verified }
+    }
+  }),
   Yandex({
     clientId: env.AUTH_YANDEX_ID,
     clientSecret: env.AUTH_YANDEX_SECRET,
@@ -32,14 +41,6 @@ const providers: Provider[] = [
       return { ...profile, name: profile.real_name, email: profile.default_email }
     }
   }),
-  // Google({
-  //   clientId: env.AUTH_GOOGLE_ID,
-  //   clientSecret: env.AUTH_GOOGLE_SECRET,
-  //   profile(profile) {
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
-  //     return { ...profile, id: profile.sub, emailVerified: profile.email_verified }
-  //   }
-  // }),
 ]
 
 export const providerMap = providers.map((provider) => {

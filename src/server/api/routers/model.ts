@@ -6,7 +6,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { PutBody } from '@/types/inputs';
+import { PutBody } from '@/shared/types/inputs';
 import { models } from '@/server/db/schema/models';
 import { takeFirstOrThrow } from '@/server/db/utils';
 
