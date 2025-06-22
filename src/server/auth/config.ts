@@ -1,7 +1,8 @@
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import { type Provider } from "next-auth/providers";
-import Yandex from "next-auth/providers/yandex";
 import Google from "next-auth/providers/google";
+import Yandex from "next-auth/providers/yandex";
+
 import { env } from "@/env";
 
 /**
@@ -30,28 +31,39 @@ const providers: Provider[] = [
     clientId: env.AUTH_GOOGLE_ID,
     clientSecret: env.AUTH_GOOGLE_SECRET,
     profile(profile) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
-      return { ...profile, id: profile.sub, emailVerified: profile.email_verified }
-    }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return {
+        ...profile,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        id: profile.sub,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        emailVerified: profile.email_verified,
+      };
+    },
   }),
   Yandex({
     clientId: env.AUTH_YANDEX_ID,
     clientSecret: env.AUTH_YANDEX_SECRET,
-    profile(profile) { 
-      return { ...profile, name: profile.real_name, email: profile.default_email }
-    }
+    profile(profile) {
+      return {
+        ...profile,
+        name: profile.real_name,
+        email: profile.default_email,
+      };
+    },
   }),
-]
+];
 
-export const providerMap = providers.map((provider) => {
-  if (typeof provider === "function") {
-    const providerData = provider()
-    return { id: providerData.id, name: providerData.name }
-  } else {
-    return { id: provider.id, name: provider.name }
-  }
-})
-.filter((provider) => provider.id !== "credentials")
+export const providerMap = providers
+  .map((provider) => {
+    if (typeof provider === "function") {
+      const providerData = provider();
+      return { id: providerData.id, name: providerData.name };
+    } else {
+      return { id: provider.id, name: provider.name };
+    }
+  })
+  .filter((provider) => provider.id !== "credentials");
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -72,7 +84,7 @@ export const authConfig = {
   debug: env.NODE_ENV !== "production" ? true : false,
   callbacks: {
     session: ({ session, user }) => {
-      return ({
+      return {
         ...session,
         user: {
           id: user.id,
@@ -80,7 +92,7 @@ export const authConfig = {
           email: session.user.email,
           image: session.user.image,
         },
-      })
+      };
     },
   },
 } satisfies NextAuthConfig;

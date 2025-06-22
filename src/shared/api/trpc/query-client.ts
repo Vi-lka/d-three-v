@@ -1,3 +1,4 @@
+/* eslint-disable import-x/no-named-as-default-member */
 import {
   defaultShouldDehydrateQuery,
   QueryClient,

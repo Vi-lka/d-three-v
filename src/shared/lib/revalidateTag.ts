@@ -1,9 +1,9 @@
 "use server";
 
-import { revalidateTag as nextRevalidateTag } from 'next/cache';
+import { revalidateTag as nextRevalidateTag } from "next/cache";
 
 const revalidateTag = (tag: string) => {
-    nextRevalidateTag(tag);
+  nextRevalidateTag(tag);
 };
 
 export default revalidateTag;

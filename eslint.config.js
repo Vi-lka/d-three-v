@@ -1,6 +1,6 @@
 import { FlatCompat } from "@eslint/eslintrc";
 import tseslint from "typescript-eslint";
-import { importX } from 'eslint-plugin-import-x'
+import { importX } from "eslint-plugin-import-x";
 // @ts-ignore -- no types for this plugin
 import drizzle from "eslint-plugin-drizzle";
 
@@ -10,14 +10,14 @@ const compat = new FlatCompat({
 
 export default tseslint.config(
   {
-    ignores: [".next",  "build", "dist", "node_modules"],
+    ignores: [".next", "build", "dist", "node_modules"],
   },
   ...compat.extends("next/core-web-vitals"),
   {
     files: ["**/*.ts", "**/*.tsx"],
     plugins: {
       drizzle,
-      'import-x': importX,
+      "import-x": importX,
     },
     extends: [
       ...tseslint.configs.recommended,
@@ -28,8 +28,9 @@ export default tseslint.config(
     ],
     rules: {
       // Common
-      "no-console": ["warn", { "allow": ["error"] }],
-      "eqeqeq": ["error", "always"],
+      "no-console": ["warn", { allow: ["error"] }],
+      eqeqeq: ["error", "always"],
+      "import-x/no-named-as-default": "off",
 
       // Typescript
       "@typescript-eslint/array-type": "off",
@@ -66,15 +67,18 @@ export default tseslint.config(
           patterns: [
             {
               group: ["@/widgets/*/*/**", "!@/widgets/**/index"],
-              message: "Import from widgets layer should use public API: '@/widgets/[slice]' instead of '@/widgets/[slice]/[segment]/...'",
+              message:
+                "Import from widgets layer should use public API: '@/widgets/[slice]' instead of '@/widgets/[slice]/[segment]/...'",
             },
             {
               group: ["@/features/*/*/**", "!@/features/**/index"],
-              message: "Import from features layer should use public API: '@/features/[slice]' instead of '@/features/[slice]/[segment]/...'",
+              message:
+                "Import from features layer should use public API: '@/features/[slice]' instead of '@/features/[slice]/[segment]/...'",
             },
             {
               group: ["@/entities/*/*/**", "!@/entities/**/index"],
-              message: "Import from entities layer should use public API: '@/entities/[slice]' instead of '@/entities/[slice]/[segment]/...'",
+              message:
+                "Import from entities layer should use public API: '@/entities/[slice]' instead of '@/entities/[slice]/[segment]/...'",
             },
           ],
         },
@@ -86,12 +90,14 @@ export default tseslint.config(
             {
               target: "**/entities/**",
               from: ["**/app/**", "**/widgets/**", "**/features/**"],
-              message: "Cannot import from higher layers (app, widgets, features) into entities.",
+              message:
+                "Cannot import from higher layers (app, widgets, features) into entities.",
             },
             {
               target: "**/features/**",
               from: ["**/app/**", "**/widgets/**"],
-              message: "Cannot import from higher layers (app, widgets) into features.",
+              message:
+                "Cannot import from higher layers (app, widgets) into features.",
             },
             {
               target: "**/widgets/**",
@@ -99,6 +105,28 @@ export default tseslint.config(
               message: "Cannot import from higher layer (app) into widgets.",
             },
           ],
+        },
+      ],
+      "import-x/order": [
+        "error",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+          ],
+          pathGroups: [
+            {
+              pattern: "@/**",
+              group: "internal",
+              position: "after",
+            },
+          ],
+          "newlines-between": "always",
+          alphabetize: { order: "asc", caseInsensitive: true },
         },
       ],
     },

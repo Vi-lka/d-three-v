@@ -1,12 +1,13 @@
 "use client";
 
-import React from 'react';
-import { useSession } from "next-auth/react"
-import { Button } from '@/shared/components/ui/button';
-import { signIn, signOut } from '@/server/auth/helpers';
+import { useSession } from "next-auth/react";
+import React from "react";
+
+import { signIn, signOut } from "@/server/auth/helpers";
+import { Button } from "@/shared/components/ui/button";
 
 export function AuthButtonClient() {
-  const session = useSession()
+  const session = useSession();
 
   return session.data?.user ? (
     <Button
@@ -24,5 +25,5 @@ export function AuthButtonClient() {
     >
       Войти
     </Button>
-  )
+  );
 }

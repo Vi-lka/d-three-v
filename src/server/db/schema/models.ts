@@ -1,9 +1,11 @@
 import { index } from "drizzle-orm/pg-core";
-import { users } from ".";
+
 import createTable from "../utils";
 
+import { users } from ".";
+
 export const models = createTable(
-  "model", 
+  "model",
   (d) => ({
     id: d
       .varchar({ length: 255 })
@@ -18,16 +20,23 @@ export const models = createTable(
     description: d.text(),
     fileUrl: d.text().notNull(),
     imageUrl: d.text().notNull(),
-    createdAt: d.timestamp("created_at", {
-      mode: "date",
-      withTimezone: true,
-    }).defaultNow().notNull(),
-    updatedAt: d.timestamp("updated_at", {
-      mode: "date",
-      withTimezone: true,
-    }).defaultNow().$onUpdate(() => new Date()).notNull(),
+    createdAt: d
+      .timestamp("created_at", {
+        mode: "date",
+        withTimezone: true,
+      })
+      .defaultNow()
+      .notNull(),
+    updatedAt: d
+      .timestamp("updated_at", {
+        mode: "date",
+        withTimezone: true,
+      })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   }),
-  (t) => [index("model_user_id_idx").on(t.userId),],
-)
+  (t) => [index("model_user_id_idx").on(t.userId)],
+);
 
-export type Model = typeof models.$inferSelect
+export type Model = typeof models.$inferSelect;

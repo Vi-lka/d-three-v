@@ -2,7 +2,9 @@ import "@/shared/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
+
 import Providers from "@/app/(providers)";
+import { Header } from "@/widgets/header";
 
 export const metadata: Metadata = {
   title: "D3V",
@@ -18,13 +20,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html 
-      lang="en" 
-      suppressHydrationWarning
-      className={`${geist.variable}`}
-    >
+    <html lang="en" suppressHydrationWarning className={`${geist.variable}`}>
       <body className="scroll-smooth antialiased">
         <Providers>
+          <Header />
           {children}
         </Providers>
       </body>

@@ -1,8 +1,4 @@
-import {
-  not,
-  sql,
-  type AnyColumn,
-} from "drizzle-orm";
+import { not, sql, type AnyColumn } from "drizzle-orm";
 import { pgTableCreator } from "drizzle-orm/pg-core";
 
 /**
@@ -22,7 +18,7 @@ export default createTable;
  * @returns The first item from the array.
  */
 export function takeFirst<TData>(items: TData[]) {
-  return items.at(0)
+  return items.at(0);
 }
 
 /**
@@ -32,7 +28,7 @@ export function takeFirst<TData>(items: TData[]) {
  * @returns The first item from the array or null.
  */
 export function takeFirstOrNull<TData>(items: TData[]) {
-  return takeFirst(items) ?? null
+  return takeFirst(items) ?? null;
 }
 
 /**
@@ -43,13 +39,13 @@ export function takeFirstOrNull<TData>(items: TData[]) {
  * @throws An error if the array is empty.
  */
 export function takeFirstOrThrow<TData>(items: TData[]) {
-  const first = takeFirst(items)
+  const first = takeFirst(items);
 
   if (!first) {
-    throw new Error("Not Found")
+    throw new Error("Not Found");
   }
 
-  return first
+  return first;
 }
 
 /**
@@ -67,7 +63,7 @@ export function isEmpty<TColumn extends AnyColumn>(column: TColumn) {
       when ${column}::text = '{}' then true
       else false
     end
-  `
+  `;
 }
 
 /**
@@ -77,5 +73,5 @@ export function isEmpty<TColumn extends AnyColumn>(column: TColumn) {
  * @returns A SQL expression that evaluates to true if the value is not empty, false otherwise.
  */
 export function isNotEmpty<TColumn extends AnyColumn>(column: TColumn) {
-  return not(isEmpty(column))
+  return not(isEmpty(column));
 }

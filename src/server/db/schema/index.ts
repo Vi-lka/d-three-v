@@ -1,3 +1,3 @@
-export * from './auth';
-export * from './models';
-export * from './relations';
+export * from "./auth";
+export * from "./models";
+export * from "./relations";

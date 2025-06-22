@@ -1,6 +1,7 @@
 import { TRPCReactProvider } from "@/shared/api/trpc/react";
-import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "@/shared/components/ui/sonner";
+
+import { ThemeProvider } from "./theme-provider";
 
 export default function Providers({
   children,
@@ -8,7 +9,7 @@ export default function Providers({
   return (
     <TRPCReactProvider>
       <ThemeProvider
-        attribute="class" 
+        attribute="class"
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
@@ -17,5 +18,5 @@ export default function Providers({
         <Toaster />
       </ThemeProvider>
     </TRPCReactProvider>
-  )
+  );
 }

@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { index, primaryKey } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
+
 import createTable from "../utils";
 
 export const users = createTable("user", (d) => ({
@@ -18,14 +19,21 @@ export const users = createTable("user", (d) => ({
     })
     .default(sql`CURRENT_TIMESTAMP`),
   image: d.varchar({ length: 255 }),
-  createdAt: d.timestamp("created_at", {
-    mode: "date",
-    withTimezone: true,
-  }).defaultNow().notNull(),
-  updatedAt: d.timestamp("updated_at", {
-    mode: "date",
-    withTimezone: true,
-  }).defaultNow().$onUpdate(() => new Date()).notNull(),
+  createdAt: d
+    .timestamp("created_at", {
+      mode: "date",
+      withTimezone: true,
+    })
+    .defaultNow()
+    .notNull(),
+  updatedAt: d
+    .timestamp("updated_at", {
+      mode: "date",
+      withTimezone: true,
+    })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 }));
 
 export const accounts = createTable(
@@ -73,13 +81,14 @@ export const verificationTokens = createTable(
     expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
   }),
   (t) => [primaryKey({ columns: [t.identifier, t.token] })],
-)
+);
 
 export const authenticators = createTable(
   "authenticator",
   (d) => ({
     credentialID: d.text().notNull().unique(),
-    userId: d.text()
+    userId: d
+      .text()
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     providerAccountId: d.text().notNull(),
@@ -90,12 +99,12 @@ export const authenticators = createTable(
     transports: d.text(),
   }),
   (t) => [primaryKey({ columns: [t.userId, t.credentialID] })],
-)
+);
 
-export type User = typeof users.$inferSelect
-export type Session = typeof sessions.$inferSelect
+export type User = typeof users.$inferSelect;
+export type Session = typeof sessions.$inferSelect;
 
 export interface SessionExtend extends Session {
-  name: User["name"],
-  email: User["email"],
+  name: User["name"];
+  email: User["email"];
 }
