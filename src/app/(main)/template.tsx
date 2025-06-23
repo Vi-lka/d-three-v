@@ -13,7 +13,7 @@ export default async function MainTemplate({
 
   return (
     <SessionProvider session={session}>
-      <main className="container mx-auto min-h-screen">{children}</main>
+      <main className="container mx-auto min-h-screen mt-14">{children}</main>
     </SessionProvider>
   );
 }

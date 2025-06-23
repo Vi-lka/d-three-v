@@ -4,6 +4,8 @@ import Logo from "@/shared/components/primitives/Logo";
 import ModeToggle from "@/shared/components/primitives/ModeToggle";
 import { cn } from "@/shared/lib/utils";
 
+import UserNav from "./user-nav";
+
 interface HeaderProps {
   className?: string;
 }
@@ -12,7 +14,7 @@ export function Header({ className }: HeaderProps) {
   return (
     <header
       className={cn(
-        "bg-background/95 supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary sticky top-0 z-10 w-full shadow backdrop-blur",
+        "bg-background/95 supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary fixed top-0 z-10 w-full shadow backdrop-blur",
         className,
       )}
     >
@@ -24,7 +26,7 @@ export function Header({ className }: HeaderProps) {
         </div>
         <div className="flex flex-1 items-center justify-end">
           <ModeToggle />
-          {/* <UserNav /> */}
+          <UserNav />
         </div>
       </div>
     </header>
