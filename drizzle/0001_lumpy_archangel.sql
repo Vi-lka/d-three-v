@@ -1,0 +1,1 @@
+ALTER TABLE "d-three-v_model" ADD COLUMN "fileSize" numeric(100, 20) NOT NULL;

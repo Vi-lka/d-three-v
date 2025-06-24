@@ -15,7 +15,7 @@ interface SearchFieldProps {
   className?: string,
 }
 
-export default function SearchField({
+export function SearchField({
   placeholder,
   disabled,
   className,

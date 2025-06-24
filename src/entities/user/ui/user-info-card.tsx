@@ -64,10 +64,12 @@ const TotalModels = () => {
     );
   }
 
+  if (!data) return null;
+
   return (
     <div className="text-center">
       <div className="text-3xl font-bold text-accent-foreground">
-        {data?.length}
+        {data.length}
       </div>
       <div className="text-sm text-muted-foreground">Загружено моделей</div>
     </div>

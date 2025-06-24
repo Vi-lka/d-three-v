@@ -1,5 +1,5 @@
 import { head, put } from "@vercel/blob";
-import { eq } from "drizzle-orm";
+import { eq, and, ilike, or } from "drizzle-orm";
 import { z } from "zod";
 
 import {
@@ -9,7 +9,7 @@ import {
 } from "@/server/api/trpc";
 import { models } from "@/server/db/schema/models";
 import { takeFirstOrThrow } from "@/server/db/utils";
-import { PaginationInput, PutBody } from "@/shared/types/inputs";
+import { PaginationInput, PutBody, SearchInput } from "@/shared/types/inputs";
 
 export const modelRouter = createTRPCRouter({
   upload: protectedProcedure
@@ -61,16 +61,28 @@ export const modelRouter = createTRPCRouter({
     }),
 
   getUserModels: protectedProcedure
-    .input(PaginationInput)
+    .input(
+      z.object({
+        pagination: PaginationInput,
+        search: SearchInput
+      })
+    )
     .query(async ({ input, ctx }) => {
-      const offset = (input.page - 1) * input.perPage;
+      const offset = (input.pagination.page - 1) * input.pagination.perPage;
 
       return await ctx.db
         .select()
         .from(models)
-        .limit(input.perPage)
+        .limit(input.pagination.perPage)
         .offset(offset)
-        .where(eq(models.userId, ctx.session.user.id));
+        .where(and(
+          eq(models.userId, ctx.session.user.id),
+          or(
+            ilike(models.name, `%${input.search.q}%`),
+            ilike(models.originalName, `%${input.search.q}%`),
+            ilike(models.description, `%${input.search.q}%`),
+          )
+        ));
     }),
 
   getModels: publicProcedure.input(PaginationInput).query(async ({ ctx }) => {

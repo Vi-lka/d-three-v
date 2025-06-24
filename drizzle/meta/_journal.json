@@ -8,6 +8,13 @@
       "when": 1750082627881,
       "tag": "0000_polite_luminals",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1750745300655,
+      "tag": "0001_lumpy_archangel",
+      "breakpoints": true
     }
   ]
 }

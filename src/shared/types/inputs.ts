@@ -40,7 +40,7 @@ export const searchParamsPaginationCache = createSearchParamsCache(
 
 
 export const SearchInput = z.object({
-  q: z.string().optional(),
+  q: z.string().default("").optional(),
 });
 export type SearchInput = z.infer<typeof SearchInput>;
 
