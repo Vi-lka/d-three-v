@@ -1,5 +1,5 @@
 import { not, sql, type AnyColumn } from "drizzle-orm";
-import { pgTableCreator } from "drizzle-orm/pg-core";
+import { customType, pgTableCreator } from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -75,3 +75,23 @@ export function isEmpty<TColumn extends AnyColumn>(column: TColumn) {
 export function isNotEmpty<TColumn extends AnyColumn>(column: TColumn) {
   return not(isEmpty(column));
 }
+
+export type NumericConfig = {
+  precision?: number;
+  scale?: number;
+};
+
+export const numericCasted = customType<{
+  data: number;
+  driverData: string;
+  config: NumericConfig;
+}>({
+  dataType: (config) => {
+    if (config?.precision && config?.scale) {
+      return `numeric(${config.precision}, ${config.scale})`;
+    }
+    return "numeric";
+  },
+  fromDriver: (value: string) => Number.parseFloat(value), // note: precision loss for very large/small digits so area to refactor if needed
+  toDriver: (value: number) => value.toString(),
+});

@@ -1,4 +1,4 @@
-import { put } from "@vercel/blob";
+import { head, put } from "@vercel/blob";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -9,7 +9,7 @@ import {
 } from "@/server/api/trpc";
 import { models } from "@/server/db/schema/models";
 import { takeFirstOrThrow } from "@/server/db/utils";
-import { PutBody } from "@/shared/types/inputs";
+import { PaginationInput, PutBody } from "@/shared/types/inputs";
 
 export const modelRouter = createTRPCRouter({
   upload: protectedProcedure
@@ -41,12 +41,15 @@ export const modelRouter = createTRPCRouter({
         },
       );
 
+      const fileData = await head(blobFile.url);
+
       const model = await ctx.db
         .insert(models)
         .values({
           userId: ctx.session.user.id,
           name: genName,
           originalName: name,
+          fileSize: fileData.size,
           fileUrl: blobFile.url,
           imageUrl: blobImage.url,
           description,
@@ -57,14 +60,24 @@ export const modelRouter = createTRPCRouter({
       return model;
     }),
 
-  getUserModels: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db
-      .select()
-      .from(models)
-      .where(eq(models.userId, ctx.session.user.id));
+  getUserModels: protectedProcedure
+    .input(PaginationInput)
+    .query(async ({ input, ctx }) => {
+      const offset = (input.page - 1) * input.perPage;
+
+      return await ctx.db
+        .select()
+        .from(models)
+        .limit(input.perPage)
+        .offset(offset)
+        .where(eq(models.userId, ctx.session.user.id));
+    }),
+
+  getModels: publicProcedure.input(PaginationInput).query(async ({ ctx }) => {
+    return await ctx.db.select().from(models);
   }),
 
-  getModel: publicProcedure
+  getModelById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       const model = await ctx.db

@@ -1,9 +1,8 @@
-import "@/shared/styles/globals.css";
-
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import Providers from "@/app/(providers)";
+import "@/shared/styles/globals.css";
 import { Header } from "@/widgets/header";
 
 export const metadata: Metadata = {

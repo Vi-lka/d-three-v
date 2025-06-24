@@ -1,3 +1,5 @@
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 import { TRPCReactProvider } from "@/shared/api/trpc/react";
 import { Toaster } from "@/shared/components/ui/sonner";
 
@@ -8,15 +10,17 @@ export default function Providers({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <TRPCReactProvider>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        {children}
-        <Toaster />
-      </ThemeProvider>
+      <NuqsAdapter>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
+      </NuqsAdapter>
     </TRPCReactProvider>
   );
 }

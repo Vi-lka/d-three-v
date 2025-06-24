@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/shared/components/ui/button";

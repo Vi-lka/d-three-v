@@ -1,6 +1,6 @@
 import { index } from "drizzle-orm/pg-core";
 
-import createTable from "../utils";
+import createTable, { numericCasted } from "../utils";
 
 import { users } from ".";
 
@@ -18,6 +18,10 @@ export const models = createTable(
     name: d.varchar({ length: 255 }).notNull(),
     originalName: d.varchar({ length: 255 }).notNull(),
     description: d.text(),
+    fileSize: numericCasted("fileSize", {
+      precision: 100,
+      scale: 20,
+    }).notNull(),
     fileUrl: d.text().notNull(),
     imageUrl: d.text().notNull(),
     createdAt: d

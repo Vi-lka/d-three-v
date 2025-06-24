@@ -1,8 +1,8 @@
 import { FlatCompat } from "@eslint/eslintrc";
-import tseslint from "typescript-eslint";
-import { importX } from "eslint-plugin-import-x";
 // @ts-ignore -- no types for this plugin
 import drizzle from "eslint-plugin-drizzle";
+import { importX } from "eslint-plugin-import-x";
+import tseslint from "typescript-eslint";
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname,
@@ -107,28 +107,28 @@ export default tseslint.config(
           ],
         },
       ],
-      "import-x/order": [
-        "error",
-        {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-          ],
-          pathGroups: [
-            {
-              pattern: "@/**",
-              group: "internal",
-              position: "after",
-            },
-          ],
-          "newlines-between": "always",
-          alphabetize: { order: "asc", caseInsensitive: true },
-        },
-      ],
+      // "import-x/order": [
+      //   "error",
+      //   {
+      //     groups: [
+      //       "builtin",
+      //       "external",
+      //       "internal",
+      //       "parent",
+      //       "sibling",
+      //       "index",
+      //     ],
+      //     pathGroups: [
+      //       {
+      //         pattern: "@/**",
+      //         group: "internal",
+      //         position: "after",
+      //       },
+      //     ],
+      //     "newlines-between": "always",
+      //     alphabetize: { order: "asc", caseInsensitive: true },
+      //   },
+      // ],
     },
   },
   {

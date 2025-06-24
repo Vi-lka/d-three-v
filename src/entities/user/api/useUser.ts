@@ -7,5 +7,5 @@ export function useUser() {
 
   if (!session.data) return null;
 
-  return session.data.user
+  return session.data.user;
 }

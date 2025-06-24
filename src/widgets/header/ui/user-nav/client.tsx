@@ -1,15 +1,26 @@
-"use client"
+"use client";
 
 import { LayoutGrid, LogOut } from "lucide-react";
 import Link from "next/link";
 
-import { UserAvatar } from "@/entities/user";
+import { useUser, UserAvatar } from "@/entities/user";
 import { signOut } from "@/server/auth/helpers";
 import { Button } from "@/shared/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/components/ui/tooltip";
-import { useUser } from "@/shared/hooks/useUser";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/shared/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/shared/components/ui/tooltip";
 
 export default function UserNavClient() {
   const user = useUser();
@@ -33,7 +44,7 @@ export default function UserNavClient() {
           <TooltipContent side="bottom">Профиль</TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      
+
       <DropdownMenuContent className="w-56" align="end" forceMount>
         {/* Info */}
         <DropdownMenuLabel className="font-normal">
@@ -60,7 +71,10 @@ export default function UserNavClient() {
         <DropdownMenuSeparator />
 
         {/* Actions */}
-        <DropdownMenuItem className="hover:cursor-pointer" onClick={async () => await signOut()}>
+        <DropdownMenuItem
+          className="hover:cursor-pointer"
+          onClick={async () => await signOut()}
+        >
           <LogOut className="w-4 h-4 mr-3 text-muted-foreground" />
           Выход
         </DropdownMenuItem>
