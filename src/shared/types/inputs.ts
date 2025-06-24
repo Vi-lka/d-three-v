@@ -1,4 +1,4 @@
-import { createSearchParamsCache, parseAsInteger } from "nuqs/server";
+import { createSearchParamsCache, parseAsInteger, parseAsString } from "nuqs/server";
 import { Readable } from "stream";
 import z from "zod";
 
@@ -19,6 +19,7 @@ export const PutBody = z.custom<
 );
 export type PutBody = z.infer<typeof PutBody>;
 
+
 export const PaginationInput = z.object({
   page: z.number().min(1).default(1),
   perPage: z
@@ -36,3 +37,14 @@ export const searchParamsPagination = {
 export const searchParamsPaginationCache = createSearchParamsCache(
   searchParamsPagination,
 );
+
+
+export const SearchInput = z.object({
+  q: z.string().optional(),
+});
+export type SearchInput = z.infer<typeof SearchInput>;
+
+export const searchParamsSearch = {
+  q: parseAsString.withDefault(""),
+};
+export const searchParamsSearchCache = createSearchParamsCache(searchParamsSearch);
