@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
-import { formatDate } from "@/shared/lib/utils";
+import { formatDate, formatFileSize } from "@/shared/lib/utils";
 
 type ModelCardDetailedProps = Model & {
   action?: React.ReactNode;
@@ -43,7 +43,7 @@ export function ModelCardDetailed(props: ModelCardDetailedProps) {
         </p>
         <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
           <span>{formatDate(props.createdAt)}</span>
-          <span>{props.fileSize}</span>
+          <span>{formatFileSize(props.fileSize)}</span>
         </div>
       </CardContent>
       <CardFooter>

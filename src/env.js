@@ -28,6 +28,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
+    NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -44,6 +45,7 @@ export const env = createEnv({
     AUTH_YANDEX_ID: process.env.AUTH_YANDEX_ID,
     AUTH_YANDEX_SECRET: process.env.AUTH_YANDEX_SECRET,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
+    NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN: process.env.NEXT_PUBLIC_BLOB_READ_WRITE_TOKEN
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
