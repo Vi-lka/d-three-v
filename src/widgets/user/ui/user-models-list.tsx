@@ -2,11 +2,12 @@
 
 import { SearchField } from "@/shared/components/primitives/SearchField";
 import { Pagination } from "@/shared/components/primitives/Pagination";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { useUserModels } from "@/entities/user";
 import { toast } from "sonner";
 import { ModelCardDetailed } from "@/entities/3d-model";
 import { Button } from "@/shared/components/ui/button";
+import Link from "next/link";
 
 export function UserModelsList() {
   return (
@@ -14,6 +15,11 @@ export function UserModelsList() {
       <CardHeader>
         <CardTitle>Мои 3D модели</CardTitle>
         <CardDescription>Управляйте своей коллекцией 3D моделей</CardDescription>
+        <CardAction>
+          <Link href="/models/upload" passHref className="w-full">
+            <Button variant="link">Загрузить 3D модель</Button>
+          </Link>
+        </CardAction>
       </CardHeader>
       <CardContent>
         <SearchField placeholder="Поиск по названию или описанию" />
